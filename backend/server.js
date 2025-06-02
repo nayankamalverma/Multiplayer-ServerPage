@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const serverRoutes = require('./routes/Server');
 
 //express app
@@ -8,13 +9,18 @@ const app = express();
 
 //middleware
 app.use(express.json());
+app.use(cors({
+    origin: ["https://multiplayer-server-page.vercel.app/"],
+    methods : ["POST","GET"],
+    credentials : true
+}))
 app.use((req,res,next)=>{
     console.log(req.path , req.method)
     next()
 });
 
 //routes
-app.get('/api',(req,res)=>{
+app.get('/',(req,res)=>{
     res.json({
         msg : " Hello world"
     })
