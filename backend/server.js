@@ -10,8 +10,8 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ["https://multiplayer-server-page-frontend.vercel.app/"],
-  methods: ["POST", "GET"],
+  origin: 'https://multiplayer-server-page-frontend.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
 app.use((req, res, next) => {
