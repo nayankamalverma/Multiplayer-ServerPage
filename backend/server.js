@@ -4,38 +4,43 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const serverRoutes = require('./routes/Server');
 
-//express app
+// Create Express app
 const app = express();
 
-//middleware
+// Middleware
 app.use(express.json());
 app.use(cors({
-    origin: ["https://multiplayer-server-page.vercel.app/"],
-    methods : ["POST","GET"],
-    credentials : true
-}))
-app.use((req,res,next)=>{
-    console.log(req.path , req.method)
-    next()
+  origin: ["https://multiplayer-server-page.vercel.app/"],
+  methods: ["POST", "GET"],
+  credentials: true
+}));
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
 });
 
-//routes
-app.get('/',(req,res)=>{
-    res.json({
-        msg : " Hello world"
-    })
+// Routes
+app.get('/', (req, res) => {
+  res.json({ msg: "Hello world" });
 });
-
 app.use('/api/servers', serverRoutes);
 
-//db connection
-mongoose.connect(process.env.MONGO_URL)
-.then(()=>{
-    //listen to request
-    app.listen(process.env.PORT, ()=>{
-        console.log("connected to db and listening on port : "+ process.env.PORT);
-    })
-})
-.catch((error)=>{
-    console.log(error)
-});
+// Database connection (only connect once per cold start)
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected) return;
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    isConnected = true;
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("DB Connection Error:", error);
+  }
+}
+
+// Exported handler for Vercel
+module.exports = async (req, res) => {
+  await connectDB();
+  return app(req, res); // let Express handle the rest
+};
