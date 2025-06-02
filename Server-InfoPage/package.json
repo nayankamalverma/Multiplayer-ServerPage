@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:4000",
+  "proxy": "https://multiplayer-server-page-backend.vercel.app/",
   "name": "server-infopage",
   "private": true,
   "version": "0.0.0",

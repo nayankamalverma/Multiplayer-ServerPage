@@ -17,7 +17,7 @@ function Center() {
   useEffect(() => {
     const fetchServerInfo = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/servers/region/"+defaultServer);
+        const response = await fetch("https://multiplayer-server-page-backend.vercel.app/api/servers/region/"+defaultServer);
         if (!response.ok) throw new Error("Network response was not ok");
 
         const json = await response.json();
